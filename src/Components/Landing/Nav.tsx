@@ -69,7 +69,9 @@ export default function Nav() {
       } else {
         localStorage.setItem("auth", "true");
         setLoading(false);
-        navigate("/wallet");
+        const mnemonic = localStorage.getItem("mnemonic");
+        if (mnemonic) navigate("/wallet");
+        else navigate("/onboard");
       }
     } else {
       if (password !== confirmPassword) {
@@ -83,8 +85,9 @@ export default function Nav() {
         const encryptedPassword = encryptPassword(password, "fusion");
         localStorage.setItem("passkey", encryptedPassword);
         localStorage.setItem("auth", "true");
+
         setLoading(false);
-        navigate("/wallet");
+        navigate("/onboard");
       }, 1000);
     }
     setLoading(true);
