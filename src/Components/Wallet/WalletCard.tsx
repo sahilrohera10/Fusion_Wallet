@@ -13,6 +13,69 @@ export default function WalletCard() {
 
   const [balance, setBalance] = useState(0);
 
+  const fetchBalance = async (key: string) => {
+    const url =
+      "https://solana-devnet.g.alchemy.com/v2/FTVhm9J81YMr36MnogkAxgl5IyBCdr1_"; // Replace with your actual RPC endpoint
+    const requestData = {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "getBalance",
+      params: [key],
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Balance data:", data.result.context.value);
+      setBalance(data.result.value / 1000000000);
+      // Process the data as needed
+    } catch (error) {
+      console.error("Error fetching balance:", error);
+    }
+  };
+  const fetchInfo = async (key: string) => {
+    const url =
+      "https://solana-devnet.g.alchemy.com/v2/FTVhm9J81YMr36MnogkAxgl5IyBCdr1_"; // Replace with your actual RPC endpoint
+    const requestData = {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "getAccountInfo",
+      params: [key],
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Info data:", data);
+      // setBalance(data.result.value / 1000000000);
+      // Process the data as needed
+    } catch (error) {
+      console.error("Error fetching balance:", error);
+    }
+  };
+
   useEffect(() => {
     const publicKeys = localStorage.getItem("public");
     // const account = localStorage.getItem("account") as string;
@@ -20,6 +83,8 @@ export default function WalletCard() {
     setAccounts(publicKeyArray.length - 1);
 
     const publicKey = publicKeyArray[currentAccount];
+    fetchBalance(publicKey);
+    fetchInfo(publicKey);
     setPublicKey(publicKey);
   }, [currentAccount]);
 
@@ -118,7 +183,7 @@ export default function WalletCard() {
           <Button className="m-2 mt-5 ml-2"> Recieve</Button>
         </div>
         <br />
-        <hr />
+        <hr className="ml-4 mr-4 opacity-70" />
         <p className="text-left ml-5 mt-3 text-lg">Recent Activity</p>
       </div>
 
