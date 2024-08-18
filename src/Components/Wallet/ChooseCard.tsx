@@ -8,7 +8,7 @@ import Seed from "./Seed";
 export default function ChooseCard() {
   const [mnemonic, setMnemonic] = useState<string[]>();
   const handleCreateSeed = () => {
-    const mnemonic = generateMnemonic();
+    const mnemonic = generateMnemonic(128);
     localStorage.setItem("mnemonic", mnemonic);
     console.log("Generated Mnemonic:", mnemonic);
     setMnemonic(mnemonic.split(" "));

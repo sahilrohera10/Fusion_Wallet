@@ -33,14 +33,25 @@ export default function Seed({ mnemonic }: { mnemonic: string[] }) {
   // creating a solana wallet
   const handleCreateWallet = async () => {
     const mnemonicString = mnemonic?.join(" ");
+    console.log("mnemonic=>", mnemonicString);
     const seed = await mnemonicToSeed(mnemonicString);
+    // console.log("seed=>", seed);
+
     const path = `m/44'/501'/0'/0'`;
     const derivedSeed = derivePath(path, seed.toString("hex")).key;
     const secret = nacl.sign.keyPair.fromSeed(derivedSeed).secretKey;
+    // console.log("secret=>", secret);
+
     const keypair = Keypair.fromSecretKey(secret);
+    // console.log("keypair=>", keypair);
+    // console.log("keypair public=>", keypair.publicKey.toBase58());
+
     localStorage.setItem("account", "0");
     localStorage.setItem("private", JSON.stringify([keypair.secretKey]));
-    localStorage.setItem("public", JSON.stringify([keypair.publicKey]));
+    localStorage.setItem(
+      "public",
+      JSON.stringify([keypair.publicKey.toBase58()])
+    );
 
     navigate("/wallet");
   };

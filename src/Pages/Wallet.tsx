@@ -11,6 +11,7 @@ export default function Wallet() {
     const mnemonic = localStorage.getItem("mnemonic");
     if (!auth) {
       navigate("/");
+      return;
     }
     if (!mnemonic) {
       navigate("/onboard");
